@@ -27,6 +27,8 @@ Terca C++ UDP uses LibTomCrypt to provide AES.
 https://github.com/libtom/libtomcrypt
 LibTomCrypt is public domain.
 
+Terca C++ UDP uses files from Terca C++ Socket
+for the secure layer.
 
 License
 =======
