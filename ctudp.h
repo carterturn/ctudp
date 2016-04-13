@@ -20,7 +20,7 @@
 
 #include <iostream>
 
-const size_t ctudp_max_packetsize = 1024;
+const size_t ctudp_max_packetsize = 256;
 
 class ctudp {
 
