@@ -18,12 +18,12 @@
 */
 
 #include <iostream>
-#include "ctudp.h"
+#include "ctudpsecure.h"
 
 using namespace std;
 
 int main(int argc, char* argv[]){
-	ctudp socket = ctudp();
+	ctudpsecure socket = ctudpsecure("qwerasdfqwerasdf");
 
 	cout << socket.c_open(2323) << "\n";
 
@@ -32,6 +32,10 @@ int main(int argc, char* argv[]){
 	cout << socket.c_read(&remote, &remote_port) << "\n";
 	cout << remote << ":" << remote_port << "\n";
 	socket.c_write("Hello how are you today", "127.0.0.1", 2324);
+
+	cout << socket.s_read(&remote, &remote_port) << "\n";
+	cout << remote << ":" << remote_port << "\n";
+	socket.s_write("More about you, hello how are you today   Terca C++ UDP is free software: you can redistribute it and/or modify it under the terms of the GNU GPL.", "127.0.0.1", 2324);
 
 	socket.c_close();
 }
