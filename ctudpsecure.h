@@ -25,21 +25,12 @@ class ctudpsecure : public ctudp, public ctsocketsecure {
 public:
 ctudpsecure(std::string key) : ctsocketsecure(key){}
 	int s_write(std::string data, std::string address, int port){
-		encryptstart();
-		int result = c_write(encrypt(data), address, port);
-		encryptend();
-		return result;
+		return c_write(encrypt(data), address, port);
 	}
 	std::string s_read(std::string * address, int * port){
-		encryptstart();
-		std::string result = decrypt(c_read(address, port));
-		encryptend();
-		return result;
+		return decrypt(c_read(address, port));
 	}
 	std::string s_read(){
-		encryptstart();
-		std::string result = decrypt(c_read());
-		encryptend();
-		return result;
+		return decrypt(c_read());
 	}
 };
