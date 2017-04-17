@@ -33,7 +33,7 @@ Please see http://www.gnutls.org/ for more information
 License
 =======
 
-Copyright 2016 Carter Turnbaugh
+Copyright 2017 Carter Turnbaugh
 
 This file is part of Terca C++ UDP.
 
@@ -49,5 +49,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with Terca C++ UDP.  If not, see <http://www.gnu.org/licenses/>.
-
-
