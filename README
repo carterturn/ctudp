@@ -23,12 +23,12 @@ sudo make install
 Dependancies
 ============
 
-Terca C++ UDP uses LibTomCrypt to provide AES.
-https://github.com/libtom/libtomcrypt
-LibTomCrypt is public domain.
-
 Terca C++ UDP uses files from Terca C++ Socket
 for the secure layer.
+
+Terca C++ UDP uses GnuTLS to provide AES.
+GnuTLS is licensed under LGPLv2.1+ and copyrighted by Free Software Foundation, Inc.
+Please see http://www.gnutls.org/ for more information
 
 License
 =======

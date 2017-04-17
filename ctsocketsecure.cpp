@@ -1,5 +1,5 @@
 /*
-  Copyright 2016 Carter Turnbaugh
+  Copyright 2017 Carter Turnbaugh
 
   This file is part of Terca C++ Sockets.
 
@@ -18,44 +18,61 @@
 */
 #include "ctsocketsecure.h"
 
+#include <cstring> // bzero
+
 using namespace std;
 
-ctsocketsecure::ctsocketsecure(string key){
-	register_cipher(&aes_desc);
-	
-	aes_key = key;
-}
+ctsocketsecure::ctsocketsecure(string key_string){
+	key.data = (unsigned char *) key_string.c_str();
+	key.size = key_string.length();
+	gnutls_datum_t iv;
+	iv.data = (unsigned char *) "unused_tmp_iv!!!";
+	iv.size = 16;
 
-void ctsocketsecure::encryptstart(){
-	cbc_start(find_cipher("aes"), (const unsigned char *) aes_key.c_str(), (const unsigned char *) aes_key.c_str(), 16, 0,&aes);
-}
-
-void ctsocketsecure::encryptend(){
-	cbc_done(&aes);
+	gnutls_cipher_init(&cipher_handle, GNUTLS_CIPHER_AES_256_CBC, &key, &iv);
 }
 
 string ctsocketsecure::decrypt(string data){
-	unsigned char msg[data.length()];
-	bzero(msg, data.length());
+	char iv[16];
+	memcpy(iv, data.c_str(), 16);
+	data.erase(0, 16);
 	
-	cbc_decrypt((unsigned char *) data.c_str(), msg, data.length(), &aes);
+	unsigned char plaintext[data.length()];
+	bzero(plaintext, data.length());
 
-	string result = string((const char*) msg).substr(0, data.length());
-		
+	gnutls_cipher_set_iv(cipher_handle, iv, 16);
+
+	gnutls_cipher_decrypt2(cipher_handle, data.c_str(), data.length(), plaintext, data.length());
+
+	string result = "";
+	for(int i = 0; i < data.length(); i++){
+		result += plaintext[i];
+	}
+	
 	return result.substr(0, result.find('\4'));
 }
 
 string ctsocketsecure::encrypt(string data){
-	int padlength = ((data.length() / 16) + 1)*16 - data.length();
-	for(int i = 0; i < padlength; i++) data += '\4';
+	int pad_length = ((data.length() / 16) + 1)*16 - data.length();
+	for(int i = 0; i < pad_length; i++){
+		data += '\4';
+	}
 
-	unsigned char emsg[data.length()];
+	unsigned char ciphertext[data.length()];
 
-	cbc_encrypt((const unsigned char *) data.c_str(), emsg, data.length(), &aes);
+	char iv[16];
+	gnutls_rnd(GNUTLS_RND_NONCE, iv, 16);
+
+	gnutls_cipher_set_iv(cipher_handle, iv, 16);
+
+	gnutls_cipher_encrypt2(cipher_handle, data.c_str(), data.length(), ciphertext, data.length());
 
 	string result = "";
+	for(int i = 0; i < 16; i++){
+		result += iv[i];
+	}
 	for(int i = 0; i < data.length(); i++){
-		result += emsg[i];
+		result += ciphertext[i];
 	}
 
 	return result;
