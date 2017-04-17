@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
 	socket.c_write("Hello how are you today. I am fine. Life is pretty good. Things are ok now.", "127.0.0.1", 2323);
 	cout << socket.c_read() << "\n";
 
-		socket.s_write("Hello how are you today. I am fine. Life is pretty good. Things are ok now.  int main(int argc, char* argv[]){ I am making this too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too too long", "127.0.0.1", 2323);
+		socket.s_write("Hello how are you today. I am fine. Life is pretty good. Things are ok now.", "127.0.0.1", 2323);
 	cout << socket.s_read() << "\n";
 
 	socket.c_close();
